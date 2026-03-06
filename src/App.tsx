@@ -470,6 +470,15 @@ function App() {
     return saved ? parseInt(saved, 10) : 250;
   });
 
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const cycleTheme = () => {
+    const themes: ('system' | 'light' | 'dark')[] = ['system', 'light', 'dark'];
+    const currentIndex = themes.indexOf(theme);
+    const nextIndex = (currentIndex + 1) % themes.length;
+    setTheme(themes[nextIndex]);
+  };
+
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     const handleMouseMove = (moveEvent: MouseEvent) => {
@@ -496,6 +505,17 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <div className="app-logo">
+          <button 
+            className="mobile-menu-btn" 
+            onClick={() => setIsMobileSidebarOpen(true)}
+            aria-label="Open menu"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
           <img src="/fia-cloud-app-icon.svg" alt="FiaCloud Logo" className="logo-icon" />
           <h1 className="app-title">FiaCloud</h1>
         </div>
@@ -515,7 +535,7 @@ function App() {
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        已复制
+                        <span className="btn-text">已复制</span>
                     </>
                   ) : (
                     <>
@@ -523,7 +543,7 @@ function App() {
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"></path>
                         </svg>
-                        复制
+                        <span className="btn-text">复制</span>
                     </>
                   )}
                 </button>
@@ -539,7 +559,7 @@ function App() {
                   <polyline points="7 10 12 15 17 10"></polyline>
                   <line x1="12" y1="15" x2="12" y2="3"></line>
                 </svg>
-                {isDownloading ? '下载中...' : '下载'}
+                <span className="btn-text">{isDownloading ? '下载中...' : '下载'}</span>
               </button>
               
               {isTextFile(selectedFile.name) && (
@@ -549,13 +569,25 @@ function App() {
                       className={`switch-btn ${isPreviewMode ? 'active' : ''}`}
                       onClick={() => setIsPreviewMode(true)}
                     >
-                      预览
+                      <span className="btn-text">预览</span>
+                      <span className="btn-icon-only">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      </span>
                     </button>
                     <button 
                       className={`switch-btn ${!isPreviewMode ? 'active' : ''}`}
                       onClick={() => setIsPreviewMode(false)}
                     >
-                      源码
+                      <span className="btn-text">源码</span>
+                      <span className="btn-icon-only">
+                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="16 18 22 12 16 6"></polyline>
+                          <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                      </span>
                     </button>
                   </div>
                   {!isPreviewMode && (
@@ -564,7 +596,14 @@ function App() {
                       onClick={handleSaveFile}
                       disabled={isSaving || fileContent === editedContent}
                     >
-                      {isSaving ? '保存中...' : '保存'}
+                      <span className="btn-text">{isSaving ? '保存中...' : '保存'}</span>
+                      <span className="btn-icon-only">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                          <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                      </span>
                     </button>
                   )}
                 </>
@@ -573,33 +612,117 @@ function App() {
           )}
           
           <div className="theme-switch">
+            <div className="theme-switch-desktop">
+              <button 
+                className={`theme-btn ${theme === 'system' ? 'active' : ''}`}
+                onClick={() => setTheme('system')}
+                title="跟随系统"
+              >
+                <span className="btn-text">系统</span>
+                <span className="btn-icon-only">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                </span>
+              </button>
+              <button 
+                className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
+                onClick={() => setTheme('light')}
+                title="浅色模式"
+              >
+                <span className="btn-text">浅色</span>
+                <span className="btn-icon-only">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="5"></circle>
+                      <line x1="12" y1="1" x2="12" y2="3"></line>
+                      <line x1="12" y1="21" x2="12" y2="23"></line>
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                      <line x1="1" y1="12" x2="3" y2="12"></line>
+                      <line x1="21" y1="12" x2="23" y2="12"></line>
+                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </span>
+              </button>
+              <button 
+                className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
+                onClick={() => setTheme('dark')}
+                title="深色模式"
+              >
+                <span className="btn-text">深色</span>
+                <span className="btn-icon-only">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                  </svg>
+                </span>
+              </button>
+            </div>
+            
             <button 
-              className={`theme-btn ${theme === 'system' ? 'active' : ''}`}
-              onClick={() => setTheme('system')}
-              title="跟随系统"
+              className="theme-btn theme-cycle-btn"
+              onClick={cycleTheme}
+              title={`当前主题：${theme === 'system' ? '跟随系统' : theme === 'light' ? '浅色' : '深色'} (点击切换)`}
             >
-              系统
-            </button>
-            <button 
-              className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
-              onClick={() => setTheme('light')}
-              title="浅色模式"
-            >
-              浅色
-            </button>
-            <button 
-              className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
-              onClick={() => setTheme('dark')}
-              title="深色模式"
-            >
-              深色
+              {theme === 'system' && (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              )}
+              {theme === 'light' && (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <line x1="12" y1="1" x2="12" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="23"></line>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                  <line x1="1" y1="12" x2="3" y2="12"></line>
+                  <line x1="21" y1="12" x2="23" y2="12"></line>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+              )}
+              {theme === 'dark' && (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+              )}
             </button>
           </div>
         </div>
       </header>
 
       <div className="app-body">
-        <aside className="app-sidebar" style={{ width: sidebarWidth }}>
+        {isMobileSidebarOpen && (
+          <div 
+            className="mobile-sidebar-overlay" 
+            onClick={() => setIsMobileSidebarOpen(false)}
+            role="button"
+            tabIndex={0}
+            aria-label="Close sidebar"
+          />
+        )}
+        <aside 
+          className={`app-sidebar ${isMobileSidebarOpen ? 'mobile-open' : ''}`} 
+          style={{ width: isMobileSidebarOpen ? '280px' : sidebarWidth }}
+        >
+          <div className="sidebar-header-mobile">
+            <span className="sidebar-title">菜单</span>
+            <button 
+              className="mobile-sidebar-close-btn" 
+              onClick={() => setIsMobileSidebarOpen(false)}
+              aria-label="Close sidebar"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
           <div className="file-list">
             {selectedConfig ? (
               <FileList 
