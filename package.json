@@ -13,10 +13,19 @@
     "@aws-sdk/client-s3": "^3.1003.0",
     "@monaco-editor/react": "^4.7.0",
     "@types/papaparse": "^5.5.2",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "github-markdown-css": "^5.9.0",
+    "katex": "^0.16.35",
     "papaparse": "^5.5.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-json-view": "^1.21.3"
+    "react-json-view": "^1.21.3",
+    "react-markdown": "^10.1.0",
+    "react-syntax-highlighter": "^16.1.1",
+    "rehype-highlight": "^7.0.2",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0"
   },
   "overrides": {
     "react": "^19.2.0",

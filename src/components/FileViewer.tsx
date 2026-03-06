@@ -2,6 +2,15 @@ import React, { useMemo } from 'react';
 import Editor from '@monaco-editor/react';
 import ReactJson from 'react-json-view';
 import Papa from 'papaparse';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus, vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import 'github-markdown-css/github-markdown.css';
+import 'katex/dist/katex.min.css';
+import './MarkdownTheme.css';
 import './FileViewer.css';
 
 interface FileViewerProps {
@@ -40,6 +49,7 @@ const FileViewer: React.FC<FileViewerProps> = ({ fileName, content, isPreviewMod
   const language = useMemo(() => getLanguage(fileName), [fileName]);
   const isJson = language === 'json';
   const isCsv = fileName.toLowerCase().endsWith('.csv');
+  const isMarkdown = language === 'markdown';
   
   // Parse JSON for preview
   const jsonContent = useMemo(() => {
@@ -123,6 +133,50 @@ const FileViewer: React.FC<FileViewerProps> = ({ fileName, content, isPreviewMod
                 </table>
             </div>
         );
+    }
+
+    if (isMarkdown) {
+      return (
+        <div 
+          className={`markdown-body ${theme === 'dark' ? 'dark-mode' : ''}`} 
+          style={{ 
+            padding: '2rem', 
+            height: '100%', 
+            width: '100%',
+            maxWidth: 'none',
+            overflow: 'auto', 
+            backgroundColor: theme === 'dark' ? '#0d1117' : '#ffffff',
+            boxSizing: 'border-box',
+            margin: 0
+          }}
+        >
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm, remarkMath]}
+            rehypePlugins={[rehypeKatex]}
+            components={{
+              code({node, inline, className, children, ...props}: any) {
+                const match = /language-(\w+)/.exec(className || '')
+                return !inline && match ? (
+                  <SyntaxHighlighter
+                    {...props}
+                    style={theme === 'dark' ? vscDarkPlus : vs}
+                    language={match[1]}
+                    PreTag="div"
+                  >
+                    {String(children).replace(/\n$/, '')}
+                  </SyntaxHighlighter>
+                ) : (
+                  <code {...props} className={className}>
+                    {children}
+                  </code>
+                )
+              }
+            }}
+          >
+            {content}
+          </ReactMarkdown>
+        </div>
+      );
     }
 
     // Default Code Preview (Read Only Monaco)
