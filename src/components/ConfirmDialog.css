@@ -1,0 +1,135 @@
+.confirm-dialog {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: modal-appear 0.2s ease-out;
+}
+
+.confirm-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.confirm-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.confirm-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.confirm-icon-container.danger {
+  background-color: rgba(255, 77, 79, 0.1);
+  color: #ff4d4f;
+}
+
+.confirm-icon-container.warning {
+  background-color: rgba(250, 173, 20, 0.1);
+  color: #faad14;
+}
+
+.confirm-icon-container.info {
+  background-color: rgba(24, 144, 255, 0.1);
+  color: #1890ff;
+}
+
+.confirm-body {
+  color: var(--text-color-secondary);
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.confirm-message {
+  white-space: pre-wrap;
+}
+
+.confirm-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.confirm-btn-secondary {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.confirm-btn-secondary:hover {
+  background-color: var(--hover-bg);
+}
+
+.confirm-btn-primary {
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.confirm-btn-primary.danger {
+  background-color: #ff4d4f;
+}
+
+.confirm-btn-primary.danger:hover {
+  background-color: #ff7875;
+}
+
+.confirm-btn-primary.warning {
+  background-color: #faad14;
+}
+
+.confirm-btn-primary.warning:hover {
+  background-color: #ffc53d;
+}
+
+.confirm-btn-primary.info {
+  background-color: #1890ff;
+}
+
+.confirm-btn-primary.info:hover {
+  background-color: #40a9ff;
+}
+
+[data-theme='dark'] .confirm-dialog {
+  background-color: #2a2a2a;
+}
+
+[data-theme='dark'] .confirm-body {
+  color: #aaa;
+}
+
+@keyframes modal-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

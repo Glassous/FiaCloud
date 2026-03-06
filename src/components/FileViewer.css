@@ -1,0 +1,72 @@
+.file-viewer-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  background-color: var(--bg-color);
+}
+
+.csv-container {
+  overflow: auto;
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.csv-preview-table {
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.csv-preview-table th,
+.csv-preview-table td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.csv-preview-table th {
+  background-color: var(--hover-bg);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.json-container {
+  overflow: auto;
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--bg-color);
+}
+
+/* React JSON View overrides if needed */
+.react-json-view {
+  background-color: transparent !important;
+}
+
+.error-message {
+  color: #dc3545;
+  padding: 16px;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 4px;
+  margin: 16px;
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--text-secondary);
+}
