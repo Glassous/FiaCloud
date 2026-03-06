@@ -1,0 +1,24 @@
+.audio-viewer-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  background-color: var(--code-bg);
+  padding: 20px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.audio-icon {
+  width: 120px;
+  height: 120px;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.audio-viewer-content {
+  width: 100%;
+  max-width: 600px;
+  outline: none;
+}

@@ -3,6 +3,9 @@ import './App.css';
 import SettingsModal, { type S3Config } from './components/SettingsModal';
 import FileList from './components/FileList';
 import FileViewer from './components/FileViewer';
+import ImageViewer from './components/ImageViewer';
+import VideoViewer from './components/VideoViewer';
+import AudioViewer from './components/AudioViewer';
 import ConfirmDialog from './components/ConfirmDialog';
 import { 
   type S3File, 
@@ -89,23 +92,63 @@ function App() {
     return textExtensions.some(ext => filename.toLowerCase().endsWith(ext));
   };
 
-  const loadFileContent = useCallback(async (file: S3File) => {
-    if (!selectedConfig || !isTextFile(file.name)) {
-      setFileContent('');
-      setEditedContent('');
-      return;
-    }
+  const isImageFile = (filename: string) => {
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico'];
+    return imageExtensions.some(ext => filename.toLowerCase().endsWith(ext));
+  };
 
-    setIsLoadingContent(true);
-    try {
-      const content = await getS3ObjectContent(selectedConfig, file.key);
-      setFileContent(content);
-      setEditedContent(content);
-    } catch (error) {
-      console.error('Failed to load file content:', error);
-      alert('加载文件内容失败');
-    } finally {
-      setIsLoadingContent(false);
+  const isVideoFile = (filename: string) => {
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
+    return videoExtensions.some(ext => filename.toLowerCase().endsWith(ext));
+  };
+
+  const isAudioFile = (filename: string) => {
+    const audioExtensions = ['.mp3', '.wav', '.ogg', '.aac', '.flac', '.m4a'];
+    return audioExtensions.some(ext => filename.toLowerCase().endsWith(ext));
+  };
+
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  const loadFileContent = useCallback(async (file: S3File) => {
+    if (!selectedConfig) return;
+
+    // Reset states
+    setFileContent('');
+    setEditedContent('');
+    setPreviewUrl(null);
+
+    if (isTextFile(file.name)) {
+      setIsLoadingContent(true);
+      try {
+        const content = await getS3ObjectContent(selectedConfig, file.key);
+        setFileContent(content);
+        setEditedContent(content);
+      } catch (error) {
+        console.error('Failed to load file content:', error);
+        alert('加载文件内容失败');
+      } finally {
+        setIsLoadingContent(false);
+      }
+    } else if (isImageFile(file.name) || isVideoFile(file.name) || isAudioFile(file.name)) {
+      setIsLoadingContent(true);
+      try {
+        const blob = await downloadS3Object(selectedConfig, file.key);
+        const url = URL.createObjectURL(blob);
+        setPreviewUrl(url);
+      } catch (error) {
+        console.error('Failed to load media:', error);
+        alert('加载媒体文件失败');
+      } finally {
+        setIsLoadingContent(false);
+      }
     }
   }, [selectedConfig]);
 
@@ -594,6 +637,12 @@ function App() {
                       onContentChange={(val) => setEditedContent(val || '')}
                       theme={effectiveTheme}
                     />
+                  ) : isImageFile(selectedFile.name) && previewUrl ? (
+                    <ImageViewer url={previewUrl} alt={selectedFile.name} />
+                  ) : isVideoFile(selectedFile.name) && previewUrl ? (
+                    <VideoViewer url={previewUrl} filename={selectedFile.name} />
+                  ) : isAudioFile(selectedFile.name) && previewUrl ? (
+                    <AudioViewer url={previewUrl} filename={selectedFile.name} />
                   ) : (
                     <div className="no-preview">
                       <p>该文件类型暂不支持直接预览内容</p>
