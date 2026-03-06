@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import ReactJson from 'react-json-view';
 import Papa from 'papaparse';
@@ -19,6 +19,7 @@ interface FileViewerProps {
   isPreviewMode: boolean;
   onContentChange: (value: string | undefined) => void;
   theme: 'light' | 'dark';
+  onCsvCellSelect?: (content: string | null) => void;
 }
 
 const getLanguage = (fileName: string) => {
@@ -45,7 +46,14 @@ const getLanguage = (fileName: string) => {
   }
 };
 
-const FileViewer: React.FC<FileViewerProps> = ({ fileName, content, isPreviewMode, onContentChange, theme }) => {
+const FileViewer: React.FC<FileViewerProps> = ({ fileName, content, isPreviewMode, onContentChange, theme, onCsvCellSelect }) => {
+  const [selectedCell, setSelectedCell] = useState<{row: number, col: number} | null>(null);
+
+  useEffect(() => {
+    setSelectedCell(null);
+    if (onCsvCellSelect) onCsvCellSelect(null);
+  }, [fileName, content, isPreviewMode]);
+
   const language = useMemo(() => getLanguage(fileName), [fileName]);
   const isJson = language === 'json';
   const isCsv = fileName.toLowerCase().endsWith('.csv');
@@ -120,13 +128,35 @@ const FileViewer: React.FC<FileViewerProps> = ({ fileName, content, isPreviewMod
                 <table className="csv-preview-table">
                     <thead>
                         <tr>
-                            {headers.map((h, i) => <th key={i}>{h}</th>)}
+                            {headers.map((h, i) => (
+                                <th 
+                                    key={i}
+                                    className={selectedCell?.row === -1 && selectedCell?.col === i ? 'selected' : ''}
+                                    onClick={() => {
+                                        setSelectedCell({row: -1, col: i});
+                                        if (onCsvCellSelect) onCsvCellSelect(h);
+                                    }}
+                                >
+                                    {h}
+                                </th>
+                            ))}
                         </tr>
                     </thead>
                     <tbody>
                         {data.map((row, i) => (
                             <tr key={i}>
-                                {headers.map((h, j) => <td key={j}>{row[h]}</td>)}
+                                {headers.map((h, j) => (
+                                    <td 
+                                        key={j}
+                                        className={selectedCell?.row === i && selectedCell?.col === j ? 'selected' : ''}
+                                        onClick={() => {
+                                            setSelectedCell({row: i, col: j});
+                                            if (onCsvCellSelect) onCsvCellSelect(row[h]);
+                                        }}
+                                    >
+                                        {row[h]}
+                                    </td>
+                                ))}
                             </tr>
                         ))}
                     </tbody>

@@ -40,6 +40,13 @@
   z-index: 1;
 }
 
+.csv-preview-table td.selected,
+.csv-preview-table th.selected {
+  background-color: rgba(0, 123, 255, 0.2);
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+}
+
 .json-container {
   overflow: auto;
   padding: 16px;

@@ -48,6 +48,8 @@ function App() {
     return (localStorage.getItem('fia_theme') as any) || 'system';
   });
   const [effectiveTheme, setEffectiveTheme] = useState<'light' | 'dark'>('light');
+  const [csvSelectedContent, setCsvSelectedContent] = useState<string | null>(null);
+  const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const [confirmState, setConfirmState] = useState<{
     isOpen: boolean;
@@ -197,6 +199,19 @@ function App() {
       alert('下载失败');
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const handleCopyCsvContent = async () => {
+    if (csvSelectedContent) {
+      try {
+        await navigator.clipboard.writeText(csvSelectedContent);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 5000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+        alert('复制失败');
+      }
     }
   };
 
@@ -428,6 +443,8 @@ function App() {
   const handleSelectFile = (file: S3File) => {
     setSelectedFile(file);
     setIsPreviewMode(true);
+    setCsvSelectedContent(null);
+    setIsCopied(false);
   };
 
   const performFolderDownload = async (keys: string[]) => {
@@ -486,6 +503,31 @@ function App() {
         <div className="header-actions">
           {selectedFile && (
             <div className="file-toolbar">
+              {csvSelectedContent && (
+                <button 
+                  className="download-btn" 
+                  onClick={handleCopyCsvContent}
+                  title="复制单元格内容"
+                  style={{ marginRight: '8px' }}
+                >
+                  {isCopied ? (
+                    <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        已复制
+                    </>
+                  ) : (
+                    <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"></path>
+                        </svg>
+                        复制
+                    </>
+                  )}
+                </button>
+              )}
               <button 
                 className="download-btn" 
                 onClick={() => handleDownloadFile()}
@@ -636,6 +678,7 @@ function App() {
                       isPreviewMode={isPreviewMode}
                       onContentChange={(val) => setEditedContent(val || '')}
                       theme={effectiveTheme}
+                      onCsvCellSelect={setCsvSelectedContent}
                     />
                   ) : isImageFile(selectedFile.name) && previewUrl ? (
                     <ImageViewer url={previewUrl} alt={selectedFile.name} />
