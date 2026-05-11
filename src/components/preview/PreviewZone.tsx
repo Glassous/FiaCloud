@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useFile } from '../../contexts/FileContext'
 import { useAppConfig } from '../../hooks/useAppConfig'
-import { getPreviewType } from '../../lib/file-utils'
+import { getPreviewType, getFileExtension } from '../../lib/file-utils'
 import { getObject, uploadObject, getDownloadUrl, getPreviewUrl } from '../../lib/s3-client'
 import { FileDetailPanel } from './FileDetailPanel'
+import { getCustomPreview } from './custom'
 import './PreviewZone.css'
 
 export function PreviewZone() {
@@ -19,6 +20,10 @@ export function PreviewZone() {
   const [originalContent, setOriginalContent] = useState<string>('')
 
   const previewType = openedFile ? getPreviewType(openedFile.name) : 'none'
+  const customPreview = useMemo(() => {
+    if (!openedFile) return undefined
+    return getCustomPreview(getFileExtension(openedFile.name))
+  }, [openedFile])
 
   // Reset states when file changes
   useEffect(() => {
@@ -193,6 +198,12 @@ export function PreviewZone() {
                       }}
                       spellCheck={false}
                       autoFocus
+                    />
+                  ) : customPreview ? (
+                    <customPreview.PreviewComponent
+                      content={content}
+                      fileName={openedFile.name}
+                      isEditing={false}
                     />
                   ) : (
                     <div className="preview-zone__readonly-text">

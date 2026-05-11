@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import { useFileExplorer } from '../hooks/useFileExplorer'
 import { useAppConfig } from '../hooks/useAppConfig'
 import type { FileItem } from '../types'
