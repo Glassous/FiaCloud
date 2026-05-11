@@ -1,0 +1,268 @@
+.sidebar {
+  width: var(--sidebar-width-expanded);
+  min-width: var(--sidebar-width-expanded);
+  max-width: var(--sidebar-width-expanded);
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-outline-variant);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--duration-slow) var(--ease-standard),
+              min-width var(--duration-slow) var(--ease-standard),
+              max-width var(--duration-slow) var(--ease-standard);
+  z-index: 10;
+  flex-shrink: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidebar--collapsed {
+  width: var(--sidebar-width-collapsed);
+  min-width: var(--sidebar-width-collapsed);
+  max-width: var(--sidebar-width-collapsed);
+}
+
+.sidebar__top,
+.sidebar__bottom {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.sidebar__middle {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0 12px;
+  transition: opacity var(--duration-normal) var(--ease-standard);
+}
+
+.sidebar--collapsed .sidebar__middle {
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sidebar__toggle {
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  border: none;
+  background: transparent;
+  color: var(--color-on-surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.sidebar__toggle:hover {
+  background-color: var(--color-surface-container-high);
+}
+
+.sidebar__toggle .material-symbols-outlined {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sidebar__nav-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar__nav-item {
+  height: 56px;
+  min-width: 56px;
+  border-radius: 28px;
+  border: none;
+  background: transparent;
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+  display: block;
+  position: relative;
+  transition: background-color var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard);
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.sidebar__nav-item:hover {
+  background-color: var(--color-surface-container-high);
+  color: var(--color-on-surface);
+}
+
+.sidebar__nav-item--active {
+  background-color: var(--color-secondary-container);
+  color: var(--color-on-secondary-container);
+}
+
+.sidebar__nav-item--active:hover {
+  background-color: var(--color-secondary-container);
+}
+
+/* Icon - always fixed at center-left */
+.sidebar__nav-item .material-symbols-outlined {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Label - fades in/out in place */
+.sidebar__label {
+  position: absolute;
+  left: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-normal) var(--ease-standard);
+}
+
+.sidebar--expanded .sidebar__label {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 100ms;
+}
+
+/* File List in Sidebar */
+.sidebar__file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  overflow: visible;
+  position: relative;
+}
+
+.sidebar__section-title {
+  padding: 0 12px;
+  margin-bottom: 4px;
+  color: var(--color-on-surface-variant);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-standard);
+  position: relative;
+  height: 20px;
+}
+
+.sidebar--expanded .sidebar__section-title {
+  opacity: 1;
+  transition-delay: 100ms;
+}
+
+.sidebar__files {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+.sidebar__file-item {
+  height: 40px;
+  min-width: 40px;
+  border-radius: 20px;
+  border: none;
+  background: transparent;
+  color: var(--color-on-surface-variant);
+  cursor: pointer;
+  display: block;
+  position: relative;
+  transition: background-color var(--duration-fast) var(--ease-standard),
+              color var(--duration-fast) var(--ease-standard);
+  flex-shrink: 0;
+  overflow: visible;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar__file-item:hover {
+  background-color: var(--color-surface-container-high);
+}
+
+.sidebar__file-item--active {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+/* File icon - always fixed at center-left */
+.sidebar__file-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px !important;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* File name - fades in/out in place */
+.sidebar__file-name {
+  position: absolute;
+  left: 38px;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-normal) var(--ease-standard);
+}
+
+.sidebar--expanded .sidebar__file-name {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 100ms;
+}
+
+.sidebar__info {
+  padding: 12px;
+  background-color: var(--color-surface-container-low);
+  border-radius: 16px;
+  margin-top: 8px;
+}
+
+.sidebar__info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-on-surface-variant);
+}
+
+.sidebar__info-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

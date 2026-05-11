@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="no"?>
+<svg id="skyline-2x1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" class="w-full max-w-3xl drop-shadow-xl">
+                        <!-- 太阳/月亮 (黄色) -->
+                        <circle cx="680" cy="120" r="50" fill="#FFD700" opacity="0.9"/>
+
+                        <!-- 第一层天际线：远景 (深紫色) -->
+                        <path fill="#2A0845" d="M0,400 v-200 h40 v-80 h40 v80 h20 v-120 h10 v-40 h10 v40 h10 v120 h40 v-150 h50 v150 h30 v-50 h40 v50 h40 v-160 l20,-20 l20,20 v160 h40 v-100 h50 v100 h30 v-180 h60 v180 h40 v-70 h40 v70 h40 v-130 h50 v130 h30 v-40 h30 v40 h20 v200 Z"/>
+
+                        <!-- 第二层天际线：中景 (中紫色) -->
+                        <path fill="#6441A5" d="M0,400 v-150 h50 v-60 h40 v60 h40 v-120 h60 v120 h30 v-80 h50 v80 h40 v-160 l20,-20 l20,20 v160 h40 v-70 h50 v70 h40 v-110 h60 v110 h40 v-50 h50 v50 h30 v-130 h50 v130 h40 v-40 h30 v40 h20 v150 Z"/>
+
+                        <!-- 第三层天际线：近景 (黄色) -->
+                        <path fill="#FFD700" d="M0,400 v-90 h60 v-50 h50 v50 h40 v-90 h60 v90 h50 v-60 h50 v60 h30 v-110 h50 v110 h60 v-70 h50 v70 h40 v-40 h60 v40 h50 v-80 h60 v80 h30 v-30 h40 v30 h20 v90 Z"/>
+                    </svg>

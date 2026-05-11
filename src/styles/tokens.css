@@ -1,0 +1,135 @@
+:root {
+  /* ===== Brand Colors (from logo.svg) =====
+   * Primary:    #6441A5 — 中景紫色建筑
+   * Primary Dark: #2A0845 — 远景深紫色天空
+   * Accent:     #FFD700 — 太阳/近景金色
+   */
+
+  /* Primary — 中景紫色 */
+  --color-primary: #6441A5;
+  --color-primary-dark: #2A0845;
+  --color-primary-light: #9B7FD4;
+  --color-primary-container: #EDE7F6;
+  --color-on-primary: #FFFFFF;
+  --color-on-primary-container: #2A0845;
+
+  /* Secondary — 紫罗兰辅色 */
+  --color-secondary: #7C4DFF;
+  --color-secondary-container: #E8DEF8;
+  --color-on-secondary: #FFFFFF;
+  --color-on-secondary-container: #1D0B3E;
+
+  /* Accent / Tertiary — 金色 (logo 太阳/近景) */
+  --color-accent: #FFD700;
+  --color-accent-dark: #C5A200;
+  --color-accent-light: #FFF8E1;
+  --color-accent-container: #FFF3CD;
+  --color-on-accent: #1D1B20;
+
+  /* Surface & Neutral (暖白底, 微紫调) */
+  --color-surface: #FFFBFE;
+  --color-surface-dim: #F5F0FA;
+  --color-surface-bright: #FFFFFF;
+  --color-surface-container-lowest: #FDFCFF;
+  --color-surface-container-low: #F8F5FB;
+  --color-surface-container: #F3EDF7;
+  --color-surface-container-high: #ECE6F0;
+  --color-surface-container-highest: #E6E0EC;
+  --color-on-surface: #1D1B20;
+  --color-on-surface-variant: #79747E;
+  --color-outline: #CAC4D0;
+  --color-outline-variant: #E7E0EC;
+
+  /* Status */
+  --color-success: #4CAF50;
+  --color-warning: #FF9800;
+  --color-error: #F44336;
+  --color-info: #2196F3;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Layout */
+  --sidebar-width-expanded: 240px;
+  --sidebar-width-collapsed: 80px;
+  --topbar-height: 64px;
+  --detail-panel-width: 380px;
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0, 1);
+  --ease-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+.dark-theme {
+  /* Primary — 浅紫 (在深色上高对比) */
+  --color-primary: #B39DFF;
+  --color-primary-dark: #7C4DFF;
+  --color-primary-light: #D1C4E9;
+  --color-primary-container: #381E72;
+  --color-on-primary: #2A0845;
+  --color-on-primary-container: #EDE7F6;
+
+  /* Secondary */
+  --color-secondary: #B39DFF;
+  --color-secondary-container: #4A2566;
+  --color-on-secondary: #2A0845;
+  --color-on-secondary-container: #EDE7F6;
+
+  /* Accent — 纯金色在深色上更闪耀 */
+  --color-accent: #FFD700;
+  --color-accent-dark: #C5A200;
+  --color-accent-light: #3E3500;
+  --color-accent-container: #4A3F00;
+  --color-on-accent: #1D1B20;
+
+  /* Surface & Neutral (以 logo 深紫 #2A0845 为基础) */
+  --color-surface: #1A1428;
+  --color-surface-dim: #120E1C;
+  --color-surface-bright: #2A2440;
+  --color-surface-container-lowest: #150F1E;
+  --color-surface-container-low: #1E1830;
+  --color-surface-container: #241E36;
+  --color-surface-container-high: #2E2640;
+  --color-surface-container-highest: #3A3050;
+  --color-on-surface: #E6E1E5;
+  --color-on-surface-variant: #CAC4D0;
+  --color-outline: #49454F;
+  --color-outline-variant: #38343E;
+
+  /* Shadows — 深色下更重 */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
