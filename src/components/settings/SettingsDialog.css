@@ -154,14 +154,22 @@
 }
 
 .settings-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: var(--space-1) var(--space-2);
   background: var(--color-surface-container);
   border-radius: var(--radius-xs);
   transition: background var(--duration-fast) var(--ease-standard);
+  gap: var(--space-1);
 }
 
 .settings-add-btn:hover {
   background: var(--color-primary-container);
+}
+
+.settings-add-btn__icon {
+  font-size: 18px !important;
 }
 
 .settings-editor {

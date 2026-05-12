@@ -23,3 +23,26 @@ export function loadConfig(): AppConfig {
 export function saveConfig(config: AppConfig): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(config))
 }
+
+export function exportConfig(config: AppConfig): void {
+  const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `fiacloud-config-${new Date().toISOString().split('T')[0]}.json`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+export function validateConfig(config: any): config is AppConfig {
+  if (!config || typeof config !== 'object') return false
+  
+  // Basic validation of required fields
+  const hasProfiles = Array.isArray(config.profiles)
+  const hasTheme = ['light', 'dark', 'system'].includes(config.theme)
+  const hasDefaultView = ['grid', 'list'].includes(config.defaultView)
+  
+  return hasProfiles && hasTheme && hasDefaultView
+}

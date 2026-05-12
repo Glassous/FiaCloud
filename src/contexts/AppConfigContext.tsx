@@ -79,6 +79,7 @@ export interface ConfigContextValue {
   updateProfile: (profile: S3Profile) => void
   deleteProfile: (profileId: string) => void
   setActiveProfile: (profileId: string) => void
+  importConfig: (config: AppConfig) => void
 }
 
 export const AppConfigContext = createContext<ConfigContextValue | undefined>(undefined)
@@ -95,6 +96,7 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
   const updateProfile = useCallback((profile: S3Profile) => dispatch({ type: 'UPDATE_PROFILE', profile }), [])
   const deleteProfile = useCallback((profileId: string) => dispatch({ type: 'DELETE_PROFILE', profileId }), [])
   const setActiveProfile = useCallback((profileId: string) => dispatch({ type: 'SET_ACTIVE_PROFILE', profileId }), [])
+  const importConfig = useCallback((config: AppConfig) => dispatch({ type: 'LOAD_CONFIG', config }), [])
 
   return (
     <AppConfigContext.Provider
@@ -109,6 +111,7 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
         updateProfile,
         deleteProfile,
         setActiveProfile,
+        importConfig,
       }}
     >
       {children}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAppConfig } from '../../hooks/useAppConfig'
 import { useFile } from '../../contexts/FileContext'
 import { createDefaultProfile, PROFILE_TEMPLATES } from '../../lib/profiles'
+import { exportConfig, validateConfig } from '../../lib/storage'
 import type { S3Profile } from '../../types'
 import './SettingsDialog.css'
 
@@ -12,13 +13,44 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onClose, onProfileSwitch }: SettingsDialogProps) {
-  const { config, addProfile, updateProfile, deleteProfile, setActiveProfile } = useAppConfig()
+  const { config, addProfile, updateProfile, deleteProfile, setActiveProfile, importConfig } = useAppConfig()
   const { setOpenedFile } = useFile()
   const [editingProfile, setEditingProfile] = useState<S3Profile | null>(null)
   const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({})
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
   if (!open) return null
+
+  const handleExport = () => {
+    exportConfig(config)
+  }
+
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string
+        const parsed = JSON.parse(content)
+        if (validateConfig(parsed)) {
+          if (confirm('导入配置将覆盖当前所有设置，是否继续？')) {
+            importConfig(parsed)
+            onProfileSwitch()
+            onClose()
+          }
+        } else {
+          alert('无效的配置文件格式')
+        }
+      } catch (err) {
+        alert('解析配置文件失败')
+      }
+    }
+    reader.readAsText(file)
+    // Reset input
+    e.target.value = ''
+  }
 
   const handleCreate = (templateKey?: string) => {
     const template = templateKey ? PROFILE_TEMPLATES[templateKey] : undefined
@@ -122,6 +154,26 @@ export function SettingsDialog({ open, onClose, onProfileSwitch }: SettingsDialo
                 <button className="settings-add-btn" onClick={() => handleCreate()}>
                   <span className="text-label-small">自定义</span>
                 </button>
+              </div>
+            </div>
+
+            <div className="settings-add-group">
+              <span className="text-label-medium">备份与恢复</span>
+              <div className="settings-add-buttons">
+                <button className="settings-add-btn" onClick={handleExport}>
+                  <span className="material-symbols-outlined settings-add-btn__icon">download</span>
+                  <span className="text-label-small">导出配置</span>
+                </button>
+                <label className="settings-add-btn" style={{ cursor: 'pointer' }}>
+                  <span className="material-symbols-outlined settings-add-btn__icon">upload</span>
+                  <span className="text-label-small">导入配置</span>
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleImport}
+                    style={{ display: 'none' }}
+                  />
+                </label>
               </div>
             </div>
           </div>
