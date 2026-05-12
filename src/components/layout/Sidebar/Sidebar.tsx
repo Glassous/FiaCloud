@@ -1,3 +1,5 @@
+import { useState, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useAppConfig } from '../../../hooks/useAppConfig'
 import { useFile } from '../../../contexts/FileContext'
 import { getIconForFileItem } from '../../../lib/file-utils'
@@ -12,6 +14,28 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   const { config, toggleSidebar, activeProfile } = useAppConfig()
   const { explorer, openedFile, setOpenedFile } = useFile()
   const expanded = config.sidebarExpanded
+
+  const [tooltip, setTooltip] = useState<{ name: string; top: number; left: number } | null>(null)
+  const tooltipTimerRef = useRef<number | null>(null)
+
+  const handleFileMouseEnter = useCallback((e: React.MouseEvent, name: string) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    tooltipTimerRef.current = window.setTimeout(() => {
+      setTooltip({
+        name,
+        top: rect.top + rect.height / 2,
+        left: rect.right + 8,
+      })
+    }, 400)
+  }, [])
+
+  const handleFileMouseLeave = useCallback(() => {
+    if (tooltipTimerRef.current !== null) {
+      clearTimeout(tooltipTimerRef.current)
+      tooltipTimerRef.current = null
+    }
+    setTooltip(null)
+  }, [])
 
   return (
     <aside className={`sidebar ${expanded ? 'sidebar--expanded' : 'sidebar--collapsed'}`}>
@@ -64,7 +88,9 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                         setOpenedFile(item)
                       }
                     }}
-                    title={item.name}
+                    data-filename={item.name}
+                    onMouseEnter={(e) => handleFileMouseEnter(e, item.name)}
+                    onMouseLeave={handleFileMouseLeave}
                   >
                     <span className="material-symbols-outlined sidebar__file-icon">
                       {icon}
@@ -90,6 +116,18 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
           <span className="text-label-medium sidebar__label">设置</span>
         </button>
       </div>
+      {tooltip && createPortal(
+        <div
+          className="sidebar__file-tooltip"
+          style={{
+            top: tooltip.top,
+            left: tooltip.left,
+          }}
+        >
+          {tooltip.name}
+        </div>,
+        document.body
+      )}
     </aside>
   )
 }
