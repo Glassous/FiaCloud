@@ -90,7 +90,7 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
               >
                 <span className="material-symbols-outlined">home</span>
               </button>
-              {breadcrumbParts.map((part, index) => (
+              {breadcrumbParts.map((part) => (
                 <div key={part.prefix} className="sidebar__breadcrumb-segment">
                   <span className="sidebar__breadcrumb-sep">/</span>
                   <button
