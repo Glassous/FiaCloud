@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { useAppConfig } from '../../../hooks/useAppConfig'
 import { useFile } from '../../../contexts/FileContext'
@@ -17,6 +17,16 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
 
   const [tooltip, setTooltip] = useState<{ name: string; top: number; left: number } | null>(null)
   const tooltipTimerRef = useRef<number | null>(null)
+
+  const breadcrumbParts = useMemo(() => {
+    const prefix = explorer.currentPrefix
+    if (!prefix) return []
+    const segments = prefix.split('/').filter(Boolean)
+    return segments.map((seg, i) => ({
+      name: seg,
+      prefix: segments.slice(0, i + 1).join('/') + '/',
+    }))
+  }, [explorer.currentPrefix])
 
   const handleFileMouseEnter = useCallback((e: React.MouseEvent, name: string) => {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -71,6 +81,28 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
         {openedFile && (
           <div className="sidebar__file-list">
             <div className="sidebar__section-title text-label-small">当前目录</div>
+            
+            <div className="sidebar__breadcrumb">
+              <button
+                className="sidebar__breadcrumb-item"
+                onClick={() => explorer.navigateTo(activeProfile!, '')}
+                title="根目录"
+              >
+                <span className="material-symbols-outlined">home</span>
+              </button>
+              {breadcrumbParts.map((part, index) => (
+                <div key={part.prefix} className="sidebar__breadcrumb-segment">
+                  <span className="sidebar__breadcrumb-sep">/</span>
+                  <button
+                    className="sidebar__breadcrumb-item"
+                    onClick={() => explorer.navigateTo(activeProfile!, part.prefix)}
+                  >
+                    {part.name}
+                  </button>
+                </div>
+              ))}
+            </div>
+
             <div className="sidebar__files">
               {explorer.items.map((item) => {
                 const isOpened = openedFile?.key === item.key
@@ -82,7 +114,6 @@ export function Sidebar({ activeTab, onTabChange }: SidebarProps) {
                     className={`sidebar__file-item ${isOpened ? 'sidebar__file-item--active' : ''}`}
                     onClick={() => {
                       if (item.type === 'folder') {
-                        setOpenedFile(null)
                         explorer.navigateTo(activeProfile!, item.key)
                       } else {
                         setOpenedFile(item)

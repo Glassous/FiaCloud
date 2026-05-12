@@ -98,6 +98,10 @@ export function PreviewZone() {
     <div className="preview-zone">
       <header className="preview-zone__header">
         <div className="preview-zone__header-left">
+          <span className="preview-zone__filename text-title-medium truncate">
+            {openedFile.name}
+            {isModified && <span className="preview-zone__modified-dot">•</span>}
+          </span>
           <button
             className="preview-zone__close-btn"
             onClick={() => setOpenedFile(null)}
@@ -105,10 +109,6 @@ export function PreviewZone() {
           >
             <span className="material-symbols-outlined">close</span>
           </button>
-          <span className="preview-zone__filename text-title-medium truncate">
-            {openedFile.name}
-            {isModified && <span className="preview-zone__modified-dot">•</span>}
-          </span>
         </div>
 
         <div className="preview-zone__header-right">
@@ -150,10 +150,12 @@ export function PreviewZone() {
           <button
             className={`preview-zone__tool-btn ${showDetails ? 'preview-zone__tool-btn--active' : ''}`}
             onClick={() => setShowDetails(!showDetails)}
-            title="详情"
+            title={showDetails ? '预览' : '详情'}
           >
-            <span className="material-symbols-outlined">info</span>
-            <span className="text-label-medium">详情</span>
+            <span className="material-symbols-outlined">
+              {showDetails ? 'visibility' : 'info'}
+            </span>
+            <span className="text-label-medium">{showDetails ? '预览' : '详情'}</span>
           </button>
 
           <button
